@@ -1,0 +1,43 @@
+extends ./base.jade
+block append style
+    link(rel="stylesheet", type="text/css", href="/assets/style.css")
+block body
+  nav
+    a(href="/login")
+      img#logo(src="/assets/img/face.png", alt="face logo")
+    .navlink
+      a(href="/logout") Log out
+  section#makeDomo
+    form#domoForm(class="domoForm", name="domoForm", action="/maker", method="POST")
+      label(for="name") Name: 
+      input#domoName(type="text", name="name", placeholder="Domo Name")
+      label(for="age") Age: 
+      input#domoAge(type="text", name="age", placeholder="Domo Age")
+      label(for="favoriteFood") Favorite Food:
+      input#domoFavoriteFood(type="text", name="favoriteFood", placeholder="Domo Favorite Food")
+      input(type="hidden", name="_csrf", value="#{csrfToken}")
+      a#makeDomoSubmit(class="makeDomoSubmit", href="#") Make Domo
+  section#domos
+    section#sortButtons
+      h3.sort Sort by: 
+      a#sortName(href="/sortByName") Name
+      a#sortAge(href="/sortByAge") Age
+    if !domos || domos.length==0
+      div.domo
+        h3.emptyDomo No Domos yet
+    else
+      each val in domos
+        div.domo
+          form#currentDomo(class="currentDomo", name="currentDomo", action="/alterDomo", method="GET")
+            img(class="domoFace", src="/assets/img/domoFace.jpeg", alt="domo face")
+            h3.domoName Name: #{val.name}
+            h3.DomoAge Age: #{val.age}
+            h3.DomoFavoriteFood Favorite Food: #{val.favoriteFood}
+            //a(href="/alterDomo") Alter Domo
+  #domoMessage
+    img#speech(src="/assets/img/speech.png", alt="speech box")
+    h3
+      span#errorMessage
+    img#domo(src="assets/img/domo.png", alt="domo")
+block scripts
+        script(src="/assets/maker.js")
